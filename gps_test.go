@@ -5,92 +5,46 @@ import (
 	"testing"
 )
 
-func Test_Distance(t *testing.T) {
+func Test_Demo(t *testing.T) {
+	// 百度地图广州南站
+	latB1 := 22.995057
+	lngB1 := 113.275872
+	// 百度转火星
+	latG1, lngG1 := BD09ToGCJ02(latB1, lngB1)
+	// 火星转国际
+	latW1, lngW1 := GCJ02ToWGS84(latG1, lngG1)
 
-	lat1 := 40.0439
-	lng1 := 116.414
+	// 百度地图广州站
+	latB2 := 23.155005
+	lngB2 := 113.264057
+	// 百度转火星
+	latG2, lngG2 := BD09ToGCJ02(latB2, lngB2)
+	// 火星转国际
+	latW2, lngW2 := GCJ02ToWGS84(latG2, lngG2)
 
-	lat2 := 40.0672
-	lng2 := 116.415
-	fmt.Println(Distance(lat1, lng1, lat2, lng2))
+	fmt.Println("百度坐标(BD-09)上广州南站到广州广州站距离：")
+	fmt.Println(Distance(latB1, lngB1, latB2, lngB2), latB1, lngB1, latB2, lngB2)
+	fmt.Println("腾讯高德坐标(GCJ-02)上广州南站到广州广州站距离：")
+	fmt.Println(Distance(latG1, lngG1, latG2, lngG2), latG1, lngG1, latG2, lngG2)
+	fmt.Println("国际坐标(WGS-84)地图上广州南站到广州广州站距离：")
+	fmt.Println(Distance(latW1, lngW1, latW2, lngW2), latW1, lngW1, latW2, lngW2)
 }
 
-func Test_OutOfChina(t *testing.T) {
-
-	lat1 := 40.0439
-	lng1 := 116.414
-
-	lat2 := 40.0672
-	lng2 := 116.415
-
-	if OutOfChina(lat1, lng1) == IsInChina(lat1, lng1) {
-		panic("check in china error")
-	}
-	if OutOfChina(lat2, lng2) == IsInChina(lat2, lng2) {
-		panic("check in china error")
-	}
-}
-
-// GCJ02ToWGS84 火星转世界
-func Test_gcj_decrypt(t *testing.T) {
-
-	lat1 := 40.0439
-	lng1 := 116.414
-
-	lat2 := 40.0672
-	lng2 := 116.415
-
-	fmt.Println(GCJ02ToWGS84(lat1, lng1))
-	fmt.Println(GCJ02ToWGS84Exact(lat1, lng1))
-
-	fmt.Println(GCJ02ToWGS84(lat2, lng2))
-	fmt.Println(GCJ02ToWGS84Exact(lat2, lng2))
-
-}
-
-// WGS84ToGCJ02 世界转火星
-func Test_gcj_encrypt(t *testing.T) {
-
-	lat1 := 40.0439
-	lng1 := 116.414
-
-	lat2 := 40.0672
-	lng2 := 116.415
-
-	fmt.Println(WGS84ToGCJ02(lat1, lng1))
-
-	fmt.Println(WGS84ToGCJ02(lat2, lng2))
-
-}
-
-// BD09ToGCJ02 百度转火星
-func Test_bd_encrypt(t *testing.T) {
-
-	lat1 := 40.0439
-	lng1 := 116.414
-
-	lat2 := 40.0672
-	lng2 := 116.415
-
-	fmt.Println(BD09ToGCJ02(lat1, lng1))
-
-	fmt.Println(BD09ToGCJ02(lat2, lng2))
-
-}
-
-// BD09ToWGS84 百度转火星
-func Test_bj2_encrypt(t *testing.T) {
-
-	lat1 := 40.0439
-	lng1 := 116.414
-
-	lat2 := 40.0672
-	lng2 := 116.415
-
-	fmt.Println(lat1, lng1)
-	fmt.Println(GCJ02ToWGS84(BD09ToGCJ02(lat1, lng1)))
-
-	fmt.Println(lat2, lng2)
-	fmt.Println(GCJ02ToWGS84(BD09ToGCJ02(lat2, lng2)))
+func Test_BDToGCJToWGS(t *testing.T) {
+	// 百度地图广州站
+	latB1 := 23.155005
+	lngB1 := 113.264057
+	// 百度转火星
+	fmt.Println("BD09:", latB1, lngB1)
+	latG1, lngG1 := BD09ToGCJ02(latB1, lngB1)
+	fmt.Println("BD09ToGCJ02:", latG1, lngG1)
+	latB1, lngB1 = GCJ02ToBD09(latG1, lngG1)
+	fmt.Println("GCJ02ToBD09:", latB1, lngB1)
+	// 火星转国际
+	latW1, lngW1 := GCJ02ToWGS84(latG1, lngG1)
+	fmt.Println("GCJ02ToWGS84:", latW1, lngW1)
+	//
+	latG1, lngG1 = WGS84ToGCJ02(latW1, lngW1)
+	fmt.Println("WGS84ToGCJ02:", latG1, lngG1)
 
 }
